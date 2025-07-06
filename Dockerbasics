@@ -1,0 +1,17 @@
+docker --version	  		     --> To Check the version
+docker images         		   --> To list the available images 
+docker ps                    --> To Check Runing status and info of the images 
+docker log name or ID        --> To see the logs for that container
+
+docker pull imagename		       --> It will pull the latest Version of that package image 
+docker pull imagename:Version  --> It will pull the that particular Version of that package image like we can access like docker image:1.23 
+
+docker run imagename                           --> To Run the latest image 
+docker run --name giveanyname imagename        --> To Run the image with your coustom input name, always image name should be last 
+docker run -d image				                     --> this will detach the terminal with the container and run the image so that we can close the cmd and still that container will run
+docker run -d -p 4000:80 imagename             --> to establish docker port  to local we can use the localhostthatyouwanttomove:dockerimageruningport
+
+docker stop name or ID          --> To stop the container we can get those details from docker ps
+
+docker build -t  image:tagenameofunderlayingos
+
