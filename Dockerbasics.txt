@@ -13,8 +13,6 @@ docker run -d -p 4000:80 imagename             --> to establish docker port  to 
 
 docker stop name or ID          --> To stop the container we can get those details from docker ps
 
-docker stop name or ID   --> to stop the container
-
 docker rm name or ID   --> to remove the container
 
 docker rmi name or ID   --> to remove the image we should stop the container first
