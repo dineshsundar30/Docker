@@ -1,1 +1,158 @@
 
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      DOCKER COMMAND CHEAT SHEET                            ║
+║                 Quick reference for day-to-day workflows                   ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 📋  SYSTEM & VERSION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+docker --version                  --> Check installed Docker version
+docker info                       --> System-wide info (containers, images, resources)
+docker stats                      --> Live CPU / memory / network usage per container
+docker system df                  --> Disk usage by images, containers, volumes
+docker system prune               --> Remove stopped containers, dangling images, unused networks
+docker system prune -a            --> Remove everything unused including all images
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 🖼️   IMAGES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+docker images                     --> List all local images
+docker images -a                  --> List all images including intermediate layers
+docker pull <image>               --> Pull the latest version of an image
+docker pull <image>:<tag>         --> Pull a specific version / tag
+docker push <image>:<tag>         --> Push image to registry (Docker Hub / ECR etc.)
+docker rmi <image>                --> Remove a local image
+docker rmi -f <image>             --> Force remove even if used by a container
+docker image prune                --> Remove all dangling (untagged) images
+docker inspect <image>            --> Full JSON metadata for an image
+docker history <image>            --> Show layer history of an image
+docker save -o out.tar <image>    --> Export image to a .tar file
+docker load -i out.tar            --> Load image from a .tar file
+docker tag <src> <repo:tag>       --> Tag an image with a new name / version
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 📦  CONTAINERS — RUN & MANAGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+docker ps                         --> List all RUNNING containers
+docker ps -a                      --> List all containers including stopped ones
+docker run <image>                --> Create and start a container from an image
+docker run -d <image>             --> Run container in detached (background) mode
+docker run -it <image> bash       --> Run interactively with a terminal shell
+docker run --name <name> <img>    --> Assign a custom name to the container
+docker run -p 8080:80 <img>       --> Map host port 8080 → container port 80
+docker run -v /host:/cont <img>   --> Bind-mount a host directory into the container
+docker run -e KEY=val <img>       --> Pass an environment variable at runtime
+docker run --rm <image>           --> Auto-remove container when it exits
+docker run --restart always <img> --> Auto-restart policy (always / on-failure / unless-stopped)
+docker start <name|id>            --> Start a stopped container
+docker stop <name|id>             --> Gracefully stop a running container
+docker kill <name|id>             --> Force stop (SIGKILL) immediately
+docker restart <name|id>          --> Stop then start a container
+docker pause <name|id>            --> Freeze all processes in a container
+docker unpause <name|id>          --> Resume a paused container
+docker rm <name|id>               --> Remove a stopped container
+docker rm -f <name|id>            --> Force remove even if running
+docker rename <old> <new>         --> Rename an existing container
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 🔍  INSPECT & DEBUG
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+docker logs <name|id>             --> View logs for a container
+docker logs -f <name|id>          --> Follow / tail logs in real time
+docker logs --tail 100 <id>       --> Show last 100 log lines
+docker inspect <name|id>          --> Full JSON config and state of a container
+docker exec -it <id> bash         --> Open a bash shell inside a running container
+docker exec <id> <cmd>            --> Run any command inside a running container
+docker top <name|id>              --> Show running processes inside container
+docker diff <name|id>             --> Show filesystem changes since container started
+docker port <name|id>             --> List port mappings for a container
+docker cp <id>:/path ./dest       --> Copy file FROM container to host
+docker cp ./src <id>:/path        --> Copy file FROM host INTO container
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 🏗️   BUILD (DOCKERFILE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+docker build .                    --> Build image from Dockerfile in current directory
+docker build -t <name:tag> .      --> Build and tag the image
+docker build -f <path> .          --> Use a specific Dockerfile path
+docker build --no-cache .         --> Build fresh without using layer cache
+docker build --build-arg K=V .    --> Pass build-time argument (ARG in Dockerfile)
+docker commit <id> <name:tag>     --> Create image from current container state
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 🌐  NETWORKS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+docker network ls                         --> List all Docker networks
+docker network create <name>              --> Create a new custom bridge network
+docker network inspect <name>             --> Show network details and connected containers
+docker network connect <net> <id>         --> Connect a running container to a network
+docker network disconnect <net> <id>      --> Disconnect container from a network
+docker network rm <name>                  --> Remove a network
+docker network prune                      --> Remove all unused networks
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 💾  VOLUMES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+docker volume ls                          --> List all volumes
+docker volume create <name>               --> Create a named volume
+docker volume inspect <name>              --> Show volume details and mount path
+docker volume rm <name>                   --> Remove a volume
+docker volume prune                       --> Remove all unused volumes
+docker run -v <vol>:/path <img>           --> Mount a named volume into a container
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 🐙  DOCKER COMPOSE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+docker compose up                         --> Start all services defined in compose file
+docker compose up -d                      --> Start all services in detached mode
+docker compose up --build                 --> Rebuild images then start services
+docker compose down                       --> Stop and remove containers + networks
+docker compose down -v                    --> Also remove named volumes on teardown
+docker compose ps                         --> List services and their status
+docker compose logs -f                    --> Stream logs from all services
+docker compose logs <service>             --> Logs for a specific service
+docker compose exec <svc> bash            --> Open shell in a running service container
+docker compose restart <svc>              --> Restart a specific service
+docker compose pull                       --> Pull latest images for all services
+docker compose config                     --> Validate and view merged compose config
+docker compose scale <svc>=N              --> Scale a service to N replicas
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 🔐  REGISTRY & AUTH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+docker login                              --> Log in to Docker Hub
+docker login <registry-url>               --> Log in to a private registry (ECR, GCR etc.)
+docker logout                             --> Log out from current registry
+docker search <term>                      --> Search Docker Hub for images
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 💡  TIPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• Use <name|id> interchangeably — short IDs (first 3+ chars) work fine
+• docker <cmd> --help   shows all flags for any command
+• Combine flags:  docker run -dit  =  detach + interactive + tty
+• docker run --rm  is great for one-off / test containers (auto cleanup)
+• Always tag your images:  docker build -t myapp:1.0 .
+• Use named volumes over bind-mounts for portability in production
+
+══════════════════════════════════════════════════════════════════════════════
